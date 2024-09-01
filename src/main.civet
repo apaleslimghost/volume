@@ -42,6 +42,8 @@ function App
   <ReactFlow
       proOptions={{hideAttribution: true}}
       fitView
+      panOnScroll
+      panOnScrollSpeed=1
       {
         nodes
         edges
