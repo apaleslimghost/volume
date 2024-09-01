@@ -1,4 +1,6 @@
-import React, { useCallback } from react
+"civet react"
+
+import React, { useCallback, useMemo } from react
 import { createRoot } from 'react-dom/client'
 import {
   ReactFlow,
@@ -7,6 +9,7 @@ import {
   useEdgesState,
   addEdge,
   type OnConnect
+  type Edge
 } from '@xyflow/react'
 
 import '@xyflow/react/dist/style.css'
@@ -15,17 +18,21 @@ initialNodes := [
   id: '1'
   position: { x: 0, y: 0 }
   data: { label: '1' }
-  ,
-  id: '2'
-  position: { x: 0, y: 100 }
-  data: { label: 'two' }
+  type: 'javascript'
 ];
 
-initialEdges := [ id: 'e1-2', source: '1', target: '2' ]
+initialEdges: Edge[] := []
+
+function JavascriptNode
+  <textarea
+    .nodrag
+    onInput={=>} />
+
 
 function App
   [nodes, setNodes, onNodesChange] := useNodesState(initialNodes)
   [edges, setEdges, onEdgesChange] := useEdgesState(initialEdges)
+  nodeTypes := useMemo(=> javascript: JavascriptNode, [])
 
   onConnect: OnConnect := useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
@@ -34,12 +41,15 @@ function App
 
   <ReactFlow
       proOptions={{hideAttribution: true}}
-      nodes={nodes}
-      edges={edges}
-      onNodesChange={onNodesChange}
-      onEdgesChange={onEdgesChange}
-      onConnect={onConnect}
       fitView
+      {
+        nodes
+        edges
+        nodeTypes
+        onNodesChange
+        onEdgesChange
+        onConnect
+      }
     >
       <Background />
 
